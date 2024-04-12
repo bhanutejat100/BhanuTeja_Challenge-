@@ -1,0 +1,24 @@
+# roles/apache/templates/httpd.conf.j2
+# Apache configuration file
+
+# ... (omitted for brevity)
+
+# Redirect HTTP to HTTPS
+<VirtualHost *:80>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+</VirtualHost>
+
+# HTTPS Virtual Host
+<VirtualHost *:443>
+    ServerName example.com
+    DocumentRoot /var/www/html
+
+    # SSL Configuration
+    SSLEngine on
+    SSLCertificateFile {{ ssl_certificate }}
+    SSLCertificateKeyFile {{ ssl_private_key }}
+
+    # ... (omitted for brevity)
+</VirtualHost>

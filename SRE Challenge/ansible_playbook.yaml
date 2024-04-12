@@ -1,0 +1,26 @@
+---
+- hosts: webservers
+  become: true
+  vars:
+    ssl_certificate: "path/to/ssl/certificate.crt"
+    ssl_private_key: "path/to/ssl/private.key"
+
+  roles:
+    - role: apache
+    - role: ssl
+
+  tasks:
+    - name: Deploy HTML content
+      copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+        mode: 0644
+
+- hosts: localhost
+  tasks:
+    - name: Run ansible-lint
+      ansible-lint:
+        paths:
+          - site.yml
+          - roles/apache/tasks/main.yml
+          - roles/ssl/tasks/main.yml
