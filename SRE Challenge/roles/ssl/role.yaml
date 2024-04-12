@@ -1,0 +1,17 @@
+---
+- name: Install SSL/TLS packages
+  package:
+    name:
+      - mod_ssl
+      - openssl
+    state: present
+
+- name: Generate self-signed SSL/TLS certificate
+  command:
+    cmd: >
+      openssl req -x509 -nodes -days 365 -newkey rsa:2048
+      -keyout {{ ssl_private_key }}
+      -out {{ ssl_certificate }}
+      -subj "/CN=example.com"
+  args:
+    creates: "{{ ssl_certificate }}"
